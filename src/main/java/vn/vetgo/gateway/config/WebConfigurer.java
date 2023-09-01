@@ -1,5 +1,9 @@
 package vn.vetgo.gateway.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hazelcast.com.fasterxml.jackson.jr.ob.JSON;
+import com.hazelcast.com.fasterxml.jackson.jr.ob.JSONObjectException;
 import javax.servlet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +47,11 @@ public class WebConfigurer implements ServletContextInitializer {
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public CorsFilter corsFilter() throws JsonProcessingException {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
-            log.debug("Registering CORS filter {}", config.toString());
+            log.debug("Registering CORS filter {}", new ObjectMapper().writeValueAsString(config));
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/management/**", config);
             source.registerCorsConfiguration("/v3/api-docs", config);
