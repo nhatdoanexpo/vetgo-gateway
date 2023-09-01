@@ -1,6 +1,9 @@
 package vn.vetgo.gateway.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -28,6 +31,7 @@ import vn.vetgo.gateway.security.oauth2.JwtGrantedAuthorityConverter;
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
+    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
     private final JHipsterProperties jHipsterProperties;
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
@@ -82,14 +86,17 @@ public class SecurityConfiguration {
 
     @Bean
     JwtDecoder jwtDecoder() {
+        log.debug("bat dau check token");
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
-
+        log.debug("bat dau check token step 1");
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
+        log.debug("bat dau check token step 2");
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        log.debug("bat dau check token step 3");
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
         jwtDecoder.setJwtValidator(withAudience);
-
+        log.debug("ket thuc check token");
         return jwtDecoder;
     }
 }
