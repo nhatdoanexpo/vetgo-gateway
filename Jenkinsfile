@@ -18,7 +18,7 @@ node {
           stage('Deploy docker'){
                   echo "Docker Image Tag Name: ${dockerImageTag}"
                   sh "docker stop vetgo-gateway || true && docker rm vetgo-gateway || true"
-                  sh "docker run --name vetgo-gateway -d -p 8081:9696 --mount type=bind,source=/Files-Upload,target=/Files-Upload vetgo-gateway:${env.BUILD_NUMBER}"
+                  sh "docker run --name vetgo-gateway -d -p 9696:8081 --mount type=bind,source=/Files-Upload,target=/Files-Upload vetgo-gateway:${env.BUILD_NUMBER}"
           }
     }catch(e){
 //         currentBuild.result = "FAILED"
