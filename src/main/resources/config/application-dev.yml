@@ -38,6 +38,12 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
+      connection-test-query: SELECT 1 # Câu truy vấn để kiểm tra kết nối
+      maximum-pool-size: 5 # Số lượng kết nối tối đa trong pool
+      minimum-idle: 1 # Số lượng kết nối tối thiểu
+      idle-timeout: 30000 # Thời gian tối đa mà kết nối có thể ở trạng thái idle (milliseconds)
+      validation-timeout: 30000 # Thời gian tối đa để kiểm tra kết nối (milliseconds)
+      connection-timeout: 30000 # Thời gian tối đa để tạo kết nối mới (milliseconds)
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
   liquibase:
@@ -79,13 +85,13 @@ jhipster:
       backup-count: 1
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
-  # cors:
-  #   allowed-origins: "http://localhost:9000,https://localhost:9000"
-  #   allowed-methods: "*"
-  #   allowed-headers: "*"
-  #   exposed-headers: "Authorization,Link,X-Total-Count"
-  #   allow-credentials: true
-  #   max-age: 1800
+  cors:
+    allowed-origins: '*'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
